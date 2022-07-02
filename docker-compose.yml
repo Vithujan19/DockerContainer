@@ -9,6 +9,8 @@ services:
      - "8080:8080"
     volumes:
      - ".:/code"
+    depends_on:
+      - db
 
   nginx:
     build:
