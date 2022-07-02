@@ -1,0 +1,37 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: "./docker/app/Dockerfile"
+    container_name: app
+    ports:
+     - "8080:8080"
+    volumes:
+     - ".:/code"
+
+  nginx:
+    build:
+      context: .
+      dockerfile: "./docker/nginx/Dockerfile"
+    container_name: nginx
+    ports:
+      - 80:80
+    depends_on:
+      - app
+
+  db:
+    platform: linux/x86_64
+    build:
+      context: .
+      dockerfile: "./docker/db/Dockerfile"
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - ./dbdata/test:/var/lib/mysql
